@@ -25,11 +25,11 @@ const rooms = [
     guests: 'Up to 2 guests',
   },
   {
-    name: 'Double Queen Room',
+    name: 'Two Double Beds Room',
     image: '/images/room-double.png',
     description:
-      'Extra space and two queen beds, perfect for friends, small families, or anyone who likes room to spread out.',
-    beds: '2 Queen beds',
+      'Extra space and two double beds, perfect for friends, small families, or anyone who likes room to spread out.',
+    beds: '2 Double beds',
     guests: 'Up to 4 guests',
   },
   {
