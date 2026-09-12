@@ -8,7 +8,7 @@ import { Reveal } from '@/components/reveal'
 const photos = [
   {
     src: '/images/Motel_Minden_002.jpg',
-    alt: 'Motel Minden exterior and property',
+    alt: 'Motel Minden exterior',
   },
   {
     src: '/images/Motel_Minden_005.jpg',
@@ -16,19 +16,19 @@ const photos = [
   },
   {
     src: '/images/Motel_Minden_017.jpg',
-    alt: 'Spacious Motel Minden suite living area',
+    alt: 'Motel Minden suite living area',
   },
   {
     src: '/images/Motel_Minden_026.jpg',
-    alt: 'Motel Minden room and private bathroom',
+    alt: 'Motel Minden guest room and bathroom',
   },
   {
     src: '/images/Motel_Minden_032.jpg',
-    alt: 'Motel Minden room with two beds',
+    alt: 'Motel Minden guest room with two beds',
   },
   {
     src: '/images/Motel_Minden_033.jpg',
-    alt: 'Motel Minden double room',
+    alt: 'Motel Minden double guest room',
   },
   {
     src: '/images/Motel_Minden_036.jpg',
@@ -40,7 +40,7 @@ const photos = [
   },
   {
     src: '/images/Motel_Minden_041.jpg',
-    alt: 'Motel Minden queen room',
+    alt: 'Motel Minden queen guest room',
   },
   {
     src: '/images/Motel_Minden_046.jpg',
@@ -52,7 +52,7 @@ const photos = [
   },
   {
     src: '/images/Motel_Minden_056.jpg',
-    alt: 'Motel Minden room with two blue beds',
+    alt: 'Motel Minden room with two beds',
   },
   {
     src: '/images/Motel_Minden_058.jpg',
@@ -68,7 +68,7 @@ const photos = [
   },
   {
     src: '/images/Motel_Minden_065.jpg',
-    alt: 'Motel Minden spacious queen room',
+    alt: 'Spacious Motel Minden queen room',
   },
 ]
 
@@ -88,22 +88,29 @@ export function Gallery() {
     )
   }, [])
 
-  // Automatically change image every 4 seconds
+  // Automatically rotate every 4 seconds
   useEffect(() => {
     if (isPaused) return
 
-    const interval = window.setInterval(() => {
+    const timer = window.setInterval(() => {
       next()
     }, 4000)
 
-    return () => window.clearInterval(interval)
+    return () => {
+      window.clearInterval(timer)
+    }
   }, [next, isPaused])
 
-  // Allow keyboard arrow navigation
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowLeft') prev()
-      if (event.key === 'ArrowRight') next()
+      if (event.key === 'ArrowLeft') {
+        prev()
+      }
+
+      if (event.key === 'ArrowRight') {
+        next()
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -131,45 +138,42 @@ export function Gallery() {
           </h2>
 
           <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
-            Explore our rooms, property, and peaceful surroundings.
+            Explore our rooms, property, and comfortable accommodations at
+            Motel Minden.
           </p>
         </Reveal>
 
-        {/* Main Gallery Carousel */}
+        {/* Gallery */}
         <Reveal className="mt-12">
           <div
             className="relative mx-auto overflow-hidden rounded-2xl bg-black shadow-xl"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
-            {/* Main Image */}
-            <div className="relative aspect-[16/9] w-full">
-              {photos.map((photo, photoIndex) => (
-                <Image
-                  key={photo.src}
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  priority={photoIndex === 0}
-                  sizes="(min-width: 1280px) 1152px, 100vw"
-                  className={`object-cover transition-all duration-700 ease-in-out ${
-                    photoIndex === index
-                      ? 'scale-100 opacity-100'
-                      : 'pointer-events-none scale-[1.02] opacity-0'
-                  }`}
-                />
-              ))}
 
-              {/* Subtle gradient */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+            {/* Current Image Only */}
+            <div className="relative aspect-[4/3] w-full sm:aspect-[16/9]">
+
+              <Image
+                key={photos[index].src}
+                src={photos[index].src}
+                alt={photos[index].alt}
+                fill
+                priority={index === 0}
+                sizes="(min-width: 1280px) 1152px, (min-width: 768px) 90vw, 100vw"
+                className="object-cover"
+              />
+
+              {/* Gradient Overlay */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
             </div>
 
-            {/* Left Arrow */}
+            {/* Previous Button */}
             <button
               type="button"
               onClick={prev}
-              className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/35 p-3 text-white backdrop-blur-sm transition-all hover:scale-110 hover:bg-black/60 sm:left-6 sm:p-4"
               aria-label="Previous photo"
+              className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/40 p-2.5 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/60 sm:left-6 sm:p-4"
             >
               <ChevronLeft
                 className="h-6 w-6 sm:h-7 sm:w-7"
@@ -177,12 +181,12 @@ export function Gallery() {
               />
             </button>
 
-            {/* Right Arrow */}
+            {/* Next Button */}
             <button
               type="button"
               onClick={next}
-              className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/35 p-3 text-white backdrop-blur-sm transition-all hover:scale-110 hover:bg-black/60 sm:right-6 sm:p-4"
               aria-label="Next photo"
+              className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/40 p-2.5 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/60 sm:right-6 sm:p-4"
             >
               <ChevronRight
                 className="h-6 w-6 sm:h-7 sm:w-7"
@@ -190,13 +194,8 @@ export function Gallery() {
               />
             </button>
 
-            {/* Photo Counter */}
-            <div className="absolute bottom-5 right-5 z-20 rounded-full bg-black/50 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md sm:text-sm">
-              {index + 1} / {photos.length}
-            </div>
-
             {/* Navigation Dots */}
-            <div className="absolute bottom-5 left-1/2 z-20 flex max-w-[70%] -translate-x-1/2 items-center justify-center gap-1.5 rounded-full bg-black/30 px-3 py-2 backdrop-blur-sm">
+            <div className="absolute bottom-4 left-1/2 z-20 flex max-w-[75%] -translate-x-1/2 items-center justify-center gap-1.5 rounded-full bg-black/35 px-3 py-2 backdrop-blur-sm sm:bottom-5">
               {photos.map((photo, photoIndex) => (
                 <button
                   key={photo.src}
@@ -210,6 +209,11 @@ export function Gallery() {
                   }`}
                 />
               ))}
+            </div>
+
+            {/* Photo Counter */}
+            <div className="absolute bottom-4 right-4 z-20 rounded-full bg-black/45 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm sm:bottom-5 sm:right-5 sm:text-sm">
+              {index + 1} / {photos.length}
             </div>
           </div>
         </Reveal>
