@@ -2,140 +2,218 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Reveal } from '@/components/reveal'
 
 const photos = [
-  { src: '/images/exterior.png', alt: 'Motel Minden exterior at dusk' },
-  { src: '/images/room-queen.png', alt: 'Queen guest room interior' },
-  { src: '/images/grounds.png', alt: 'Landscaped grounds and seating area' },
-  { src: '/images/bathroom.png', alt: 'Clean, modern private bathroom' },
-  { src: '/images/room-double.png', alt: 'Double queen guest room' },
-  { src: '/images/explore-lake.png', alt: 'Lake near the motel' },
-  { src: '/images/room-family.png', alt: 'Spacious family suite' },
-  { src: '/images/explore-canoe.png', alt: 'Canoeing on a nearby lake' },
+  {
+    src: '/images/Motel_Minden_002.jpg',
+    alt: 'Motel Minden exterior and property',
+  },
+  {
+    src: '/images/Motel_Minden_005.jpg',
+    alt: 'Motel Minden exterior walkway',
+  },
+  {
+    src: '/images/Motel_Minden_017.jpg',
+    alt: 'Spacious Motel Minden suite living area',
+  },
+  {
+    src: '/images/Motel_Minden_026.jpg',
+    alt: 'Motel Minden room and private bathroom',
+  },
+  {
+    src: '/images/Motel_Minden_032.jpg',
+    alt: 'Motel Minden room with two beds',
+  },
+  {
+    src: '/images/Motel_Minden_033.jpg',
+    alt: 'Motel Minden double room',
+  },
+  {
+    src: '/images/Motel_Minden_036.jpg',
+    alt: 'Motel Minden private bathroom',
+  },
+  {
+    src: '/images/Motel_Minden_039.jpg',
+    alt: 'Motel Minden guest room',
+  },
+  {
+    src: '/images/Motel_Minden_041.jpg',
+    alt: 'Motel Minden queen room',
+  },
+  {
+    src: '/images/Motel_Minden_046.jpg',
+    alt: 'Motel Minden bathroom vanity',
+  },
+  {
+    src: '/images/Motel_Minden_048.jpg',
+    alt: 'Motel Minden guest room with desk and television',
+  },
+  {
+    src: '/images/Motel_Minden_056.jpg',
+    alt: 'Motel Minden room with two blue beds',
+  },
+  {
+    src: '/images/Motel_Minden_058.jpg',
+    alt: 'Motel Minden double guest room',
+  },
+  {
+    src: '/images/Motel_Minden_060.jpg',
+    alt: 'Spacious Motel Minden guest room',
+  },
+  {
+    src: '/images/Motel_Minden_061.jpg',
+    alt: 'Motel Minden suite with kitchenette',
+  },
+  {
+    src: '/images/Motel_Minden_065.jpg',
+    alt: 'Motel Minden spacious queen room',
+  },
 ]
 
 export function Gallery() {
-  const [index, setIndex] = useState<number | null>(null)
+  const [index, setIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
-  const close = useCallback(() => setIndex(null), [])
-  const prev = useCallback(
-    () => setIndex((i) => (i === null ? i : (i - 1 + photos.length) % photos.length)),
-    [],
-  )
-  const next = useCallback(
-    () => setIndex((i) => (i === null ? i : (i + 1) % photos.length)),
-    [],
-  )
+  const prev = useCallback(() => {
+    setIndex((current) =>
+      current === 0 ? photos.length - 1 : current - 1,
+    )
+  }, [])
 
+  const next = useCallback(() => {
+    setIndex((current) =>
+      current === photos.length - 1 ? 0 : current + 1,
+    )
+  }, [])
+
+  // Automatically change image every 4 seconds
   useEffect(() => {
-    if (index === null) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close()
-      if (e.key === 'ArrowLeft') prev()
-      if (e.key === 'ArrowRight') next()
+    if (isPaused) return
+
+    const interval = window.setInterval(() => {
+      next()
+    }, 4000)
+
+    return () => window.clearInterval(interval)
+  }, [next, isPaused])
+
+  // Allow keyboard arrow navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') prev()
+      if (event.key === 'ArrowRight') next()
     }
-    window.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
+
+    window.addEventListener('keydown', handleKeyDown)
+
     return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [index, close, prev, next])
+  }, [prev, next])
 
   return (
-    <section className="bg-background py-20 sm:py-28">
+    <section
+      id="gallery"
+      className="bg-background py-20 sm:py-28"
+    >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <Reveal className="max-w-2xl">
+
+        {/* Heading */}
+        <Reveal className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
             Gallery
           </p>
+
           <h2 className="mt-4 text-balance font-serif text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl">
             Take a look around
           </h2>
+
           <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
-            Browse the rooms, property, and the scenery that surrounds us. Select
-            any photo to view it larger.
+            Explore our rooms, property, and peaceful surroundings.
           </p>
         </Reveal>
 
-        <Reveal className="mt-12 grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] md:grid-cols-4">
-          {photos.map((photo, i) => (
+        {/* Main Gallery Carousel */}
+        <Reveal className="mt-12">
+          <div
+            className="relative mx-auto overflow-hidden rounded-2xl bg-black shadow-xl"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            {/* Main Image */}
+            <div className="relative aspect-[16/9] w-full">
+              {photos.map((photo, photoIndex) => (
+                <Image
+                  key={photo.src}
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  priority={photoIndex === 0}
+                  sizes="(min-width: 1280px) 1152px, 100vw"
+                  className={`object-cover transition-all duration-700 ease-in-out ${
+                    photoIndex === index
+                      ? 'scale-100 opacity-100'
+                      : 'pointer-events-none scale-[1.02] opacity-0'
+                  }`}
+                />
+              ))}
+
+              {/* Subtle gradient */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+            </div>
+
+            {/* Left Arrow */}
             <button
-              key={photo.src}
               type="button"
-              onClick={() => setIndex(i)}
-              className={`group relative overflow-hidden rounded-xl ${
-                i === 0 || i === 5 ? 'col-span-2 row-span-1' : ''
-              }`}
-              aria-label={`View photo: ${photo.alt}`}
+              onClick={prev}
+              className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/35 p-3 text-white backdrop-blur-sm transition-all hover:scale-110 hover:bg-black/60 sm:left-6 sm:p-4"
+              aria-label="Previous photo"
             >
-              <Image
-                src={photo.src || '/placeholder.svg'}
-                alt={photo.alt}
-                fill
-                sizes="(min-width: 768px) 25vw, 50vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              <ChevronLeft
+                className="h-6 w-6 sm:h-7 sm:w-7"
+                aria-hidden="true"
               />
-              <span className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/15" />
             </button>
-          ))}
+
+            {/* Right Arrow */}
+            <button
+              type="button"
+              onClick={next}
+              className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/35 p-3 text-white backdrop-blur-sm transition-all hover:scale-110 hover:bg-black/60 sm:right-6 sm:p-4"
+              aria-label="Next photo"
+            >
+              <ChevronRight
+                className="h-6 w-6 sm:h-7 sm:w-7"
+                aria-hidden="true"
+              />
+            </button>
+
+            {/* Photo Counter */}
+            <div className="absolute bottom-5 right-5 z-20 rounded-full bg-black/50 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md sm:text-sm">
+              {index + 1} / {photos.length}
+            </div>
+
+            {/* Navigation Dots */}
+            <div className="absolute bottom-5 left-1/2 z-20 flex max-w-[70%] -translate-x-1/2 items-center justify-center gap-1.5 rounded-full bg-black/30 px-3 py-2 backdrop-blur-sm">
+              {photos.map((photo, photoIndex) => (
+                <button
+                  key={photo.src}
+                  type="button"
+                  onClick={() => setIndex(photoIndex)}
+                  aria-label={`View photo ${photoIndex + 1}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    photoIndex === index
+                      ? 'w-6 bg-white'
+                      : 'w-1.5 bg-white/50 hover:bg-white/80'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </Reveal>
       </div>
-
-      {index !== null && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Photo viewer"
-          onClick={close}
-        >
-          <button
-            type="button"
-            onClick={close}
-            className="absolute right-4 top-4 rounded-full p-2 text-white/80 transition-colors hover:text-white"
-            aria-label="Close"
-          >
-            <X className="h-7 w-7" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              prev()
-            }}
-            className="absolute left-3 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 sm:left-6"
-            aria-label="Previous photo"
-          >
-            <ChevronLeft className="h-7 w-7" aria-hidden="true" />
-          </button>
-          <div
-            className="relative h-[75vh] w-full max-w-4xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={photos[index].src || '/placeholder.svg'}
-              alt={photos[index].alt}
-              fill
-              sizes="100vw"
-              className="object-contain"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              next()
-            }}
-            className="absolute right-3 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 sm:right-6"
-            aria-label="Next photo"
-          >
-            <ChevronRight className="h-7 w-7" aria-hidden="true" />
-          </button>
-        </div>
-      )}
     </section>
   )
 }

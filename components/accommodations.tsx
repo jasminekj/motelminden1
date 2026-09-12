@@ -28,7 +28,7 @@ const rooms = [
     name: 'Double Queen Room',
     image: '/images/room-double.png',
     description:
-      'Extra space and two queen beds — perfect for friends, small families, or anyone who likes room to spread out.',
+      'Extra space and two queen beds, perfect for friends, small families, or anyone who likes room to spread out.',
     beds: '2 Queen beds',
     guests: 'Up to 4 guests',
   },
@@ -37,8 +37,8 @@ const rooms = [
     image: '/images/room-family.png',
     description:
       'Our most spacious option with flexible sleeping arrangements and a relaxed sitting area for longer stays.',
-    beds: '[Bed configuration]',
-    guests: 'Up to [X] guests',
+    beds: '2 Queen beds + Sofa bed',
+    guests: 'Up to 6 guests',
   },
 ]
 
@@ -54,8 +54,8 @@ const roomAmenities = [
 ]
 
 const policies = [
-  { icon: PawPrint, label: '[Pet policy placeholder]' },
-  { icon: Cigarette, label: '[Smoking policy placeholder]' },
+  { icon: PawPrint, label: 'We’re happy to welcome pets with a refundable pet deposit' },
+  { icon: Cigarette, label: 'We offer a selection of designated smoking rooms for guests' },
 ]
 
 export function Accommodations() {
@@ -71,8 +71,7 @@ export function Accommodations() {
           </h2>
           <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
             Each room at Motel Minden is thoughtfully appointed for a restful
-            stay. Details below are placeholders and can be updated with exact
-            room information.
+            stay. 
           </p>
         </Reveal>
 
