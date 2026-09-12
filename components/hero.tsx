@@ -29,8 +29,8 @@ export function Hero() {
           Minden, Ontario
         </p>
 
-        <h1 className="max-w-4xl font-serif text-5xl font-semibold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
-          Your comfortable stay in cottage country
+        <h1 className="max-w-4xl font-serif text-5xl font-semibold leading-tight tracking-tight sm:text-8xl lg:text-8xl">
+          Motel Minden
         </h1>
 
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 sm:text-lg">
