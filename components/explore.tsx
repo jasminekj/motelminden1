@@ -98,8 +98,7 @@ export function Explore() {
             Explore Minden &amp; the Haliburton Highlands
           </h2>
           <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
-            Adventure and relaxation are right outside your door. Distances are
-            placeholders and can be updated with exact drive times.
+            Adventure and relaxation are right outside your door.
           </p>
         </Reveal>
 
